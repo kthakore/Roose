@@ -38,7 +38,7 @@ L<Mongoose>, L<KiokuDB>
 
 =head1
 
-	kthakore, C<kthakore@cpan.com>
+	kthakore, C<kthakore@cpan.org>
 
 =head1 LICENSE
 
