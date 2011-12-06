@@ -1,6 +1,28 @@
 use strict;
 use warnings;
 package Roose;
+{
+	$Roose::VERSION = '0.11';
+}
+use Net::Riak;
+use MooseX::Singleton;
+use Moose::Util::TypeConstraints;
+use Carp;
+
+has '_bucket' => (is => 'rw', isa => 'HashRef[Net::Riak::Bucket]');
+
+has '_client' => (
+    is => 'rw',
+	isa => 'Net::Riak::Client'
+);
+
+has '_args' => ( is => 'rw', 
+				isa => 'HashRef', 
+				default => sub { 
+				 { host => 'http://127.0.0.1:8091' }
+							   }
+				);
+
 
 1;
 
