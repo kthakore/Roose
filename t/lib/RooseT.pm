@@ -7,7 +7,7 @@ sub db { return $db }
 
 $ENV{ROOSE_SKIP} and plan skip_all => 'ROOSE_SKIP is set. Test skipped'.
 eval {
-	$db = Roose->db( $ENV{ROOSEDB} ? split( /,/, $ENV{ROOSEDB} ) : '_mongoose_testing' )
+	$db = Roose->bucket( $ENV{ROOSEDB} ? split( /,/, $ENV{ROOSEDB} ) : '_mongoose_testing' )
 };
 if( $@ ) {
 	$ENV{ROOSE_SKIP} = 1;
