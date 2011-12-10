@@ -8,18 +8,27 @@ use Params::Coerce;
 use Scalar::Util qw/refaddr reftype/;
 use Carp;
 use List::Util qw/first/;
+use Data::Dumper;
 
 with 'Roose::Role::Collapser';
 with 'Roose::Role::Expander';
 with 'Roose::Role::Engine';
 
 
-sub save {}
+sub save { 
+	my ($self, @scope) = @_;
+	my $b = $self->bucket;
+	}
 sub delete {}
 sub find {}
 sub find_one {}
 sub query {}
-sub collection {}
+sub bucket {
+	my ($self, $new_buck) = @_;
+	my $connection = $self->connection;
+
+	warn Dumper $connection;
+	}
 
 sub expand {}
 sub collapse {}

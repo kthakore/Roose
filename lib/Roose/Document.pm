@@ -9,7 +9,7 @@ use MooseX::Role::Parameterized;
 use Roose::Meta::AttributeTraits;
 
 parameter '-engine' => ( isa => 'Roose::Role::Engine', );
-parameter '-collection_name' => ( isa => 'Str', );
+parameter '-bucket_name' => ( isa => 'Str', );
 parameter '-pk' => ( isa => 'ArrayRef[Str]', );
 parameter '-as' => ( isa => 'Str', );
 
@@ -18,7 +18,7 @@ role {
     my %args       = @_;
     my $class_name = $args{consumer}->name;
 
-    my $collection_name = $p->{'-collection_name'} || do {
+    my $bucket_name = $p->{'-bucket_name'} || do {
         # sanitize the class name
         Roose->naming->("$class_name");
     };
@@ -37,17 +37,17 @@ role {
     my $config = {
         pk              => $p->{'-pk'},
         as              => $p->{'-as'},
-        collection_name => $collection_name,
+        bucket_name => $bucket_name,
     };
 
     #method "_mxm_config" => sub{ $config };
-    $class_name->meta->{mongoose_config} = $config;
+    $class_name->meta->{roose_config} = $config;
 
     # aliasing
     if ( my $as = $p->{'-as'} ) {
         no strict 'refs';
         *{ $as . "::" } = \*{ $class_name . "::" };
-        $as->meta->{mongoose_config} = $config;
+        $as->meta->{roose_config} = $config;
     }
 
 };
