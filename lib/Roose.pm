@@ -25,7 +25,7 @@ has '_args' => ( is => 'rw',
 
 sub bucket {
 	my $self = shift;
-	my %params = @_ == 1 ? (db_name=>shift) : @_;
+	my %params = @_ == 1 ? (bucket_name=>shift) : @_;
 
 	my $now = delete $params{'now'};
 	$self->_args( \%params );
