@@ -26,6 +26,9 @@ package main;
 	my $homer = Person->new( name => 'Homer Simpson' );
 	my $id = $homer->save;
 
+	diag 'Bucket of homer:'. $homer->bucket;
+	diag $bucket;
+
 }
 
 done_testing();

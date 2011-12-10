@@ -25,9 +25,6 @@ sub find_one {}
 sub query {}
 sub bucket {
 	my ($self, $new_buck) = @_;
-	my $connection = $self->connection;
-
-	warn Dumper $connection;
 	}
 
 sub expand {}

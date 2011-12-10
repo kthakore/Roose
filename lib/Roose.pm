@@ -8,12 +8,13 @@ use Net::Riak;
 use MooseX::Singleton;
 use Moose::Util::TypeConstraints;
 use Carp;
+use Data::Dumper;
 
 has '_bucket' => (is => 'rw', isa => 'HashRef[Net::Riak::Bucket]');
 
 has '_client' => (
     is => 'rw',
-	isa => 'Net::Riak::Client'
+	isa => 'Net::Riak'
 );
 
 has '_args' => ( is => 'rw', 
@@ -37,8 +38,8 @@ sub connect {
 	my %params = @_ || %{ $self->_args};
 	my $key = delete( $params{'-class'} ) || 'default';
 	$self->_client( Net::Riak->new(%params) ) unless ref $self->_client;
-
-	$self->_bucket( { $key => $self->_client->bucket( $params{key} ) } );
+	$self->_bucket( { $key => $self->_client->bucket( $params{bucket_name} ) } );
+	return $self->_bucket->{$key};
 }
 
 sub disconnect {
