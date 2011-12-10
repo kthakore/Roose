@@ -82,6 +82,57 @@ sub load_schema {
 
 }
 
+
+# naming templates
+my %naming_template = (
+    same       => sub { $_[0] },
+    short      => sub { $_[0] =~ s{^.*\:\:(.*?)$}{$1}g; $_[0] },
+    plural     => sub { $_[0] =~ s{^.*\:\:(.*?)$}{$1}g; lc "$_[0]s" },
+    decamel    => sub { $_[0] =~ s{([a-z])([A-Z])}{$1_$2}g; lc $_[0] },
+    undercolon => sub { $_[0] =~ s{\:\:}{_}g; lc $_[0] },
+    lower      => sub { lc $_[0] },
+    lc         => sub { lc $_[0] },
+    upper      => sub { uc $_[0] },
+    uc         => sub { uc $_[0] },
+    default => sub {
+        $_[0] =~ s{([a-z])([A-Z])}{$1_$2}g;
+        $_[0] =~ s{\:\:}{_}g;
+        lc $_[0];
+    }
+);
+subtype 'Roose::CodeRef' => as 'CodeRef';
+coerce 'Roose::CodeRef'
+    => from 'Str' => via {
+        my $template = $naming_template{ $_[0] }
+            or die "naming template '$_[0]' not found";
+        return $template;
+    }
+    => from 'ArrayRef' => via {
+        my @filters;
+        for( @{ $_[0] } ) {
+            my $template = $naming_template{ $_ }
+                or die "naming template '$_' not found";
+            # add filter to list
+            push @filters, sub { 
+                my $name = shift;
+                return $template->($name);
+            } 
+        }
+        # now, accumulate all filters
+        return sub {
+            my $name = shift;
+            map { $name = $_->($name) } @filters;
+            return $name;
+        }
+    };
+
+has 'naming' => (
+    is      => 'rw',
+    isa     => 'Roose::CodeRef',
+    coerce  => 1,
+    default => sub {$naming_template{default} }
+);
+
 1;
 
 =pod

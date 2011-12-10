@@ -33,9 +33,9 @@ has 'lazy_select' => (
 
 # -----------------------------------------------------------------
 
-package Roose::Meta::Attribute::Trait::DoNotMongoSerialize;
+package Roose::Meta::Attribute::Trait::DoNotRooseSerialize;
 {
-  $Roose::Meta::Attribute::Trait::DoNotMongoSerialize::VERSION = '0.01';
+  $Roose::Meta::Attribute::Trait::DoNotRooseSerialize::VERSION = '0.01';
 }
 use strict;
 use Moose::Role;
@@ -54,11 +54,11 @@ has 'lazy_select' => (
 # -----------------------------------------------------------------
 
 {
-    package Moose::Meta::Attribute::Custom::Trait::DoNotMongoSerialize;
+    package Moose::Meta::Attribute::Custom::Trait::DoNotRooseSerialize;
 {
-  $Moose::Meta::Attribute::Custom::Trait::DoNotMongoSerialize::VERSION = '0.01';
+  $Moose::Meta::Attribute::Custom::Trait::DoNotRooseSerialize::VERSION = '0.01';
 }
-    sub register_implementation {'Roose::Meta::Attribute::Trait::DoNotMongoSerialize'}
+    sub register_implementation {'Roose::Meta::Attribute::Trait::DoNotRooseSerialize'}
 }
 
 # -----------------------------------------------------------------
