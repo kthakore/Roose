@@ -18,8 +18,13 @@ with 'Roose::Role::Engine';
 sub save { 
 	my ($self, @scope) = @_;
 	my $b = $self->bucket;
-	warn "Running save";
-	warn Dumper $b
+	my $document = $self->collapse( @scope );
+	my $obj = $b->new_object( undef, $document );
+
+	$obj->store;
+
+	warn $obj->key;
+	
 	}
 sub delete {}
 sub find {}
@@ -37,7 +42,7 @@ sub bucket {
 	# setter
 	my $is_singleton = ! ref $self;
 
-	if( ref($new_buck) eq 'Net::Riak::Bucket' )
+	if( ref($new_bucket) eq 'Net::Riak::Bucket' )
 	{
         # changing collection objects directly
         if( $is_singleton ) {
@@ -65,6 +70,18 @@ sub bucket {
 }
 
 sub expand {}
-sub collapse {}
+sub collapse {
+	my ($self, @scope)= @_;
+	
+	if( my $duplicate = first { refaddr($self) == refaddr($_) } @scope ) {
+		my $class = blessed $duplicate;
+		my $ref_id = $duplicate->_id;
+		return undef unless defined $class && $ref_id;
+		return { '$ref' => $class->meta->{roose_config}->{bucket_name}, '$id' => $ref_id	 };
+	}
+
+	my $packed = {%$self};
+
+}
 
 1;
