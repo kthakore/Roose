@@ -7,7 +7,7 @@ sub bucket { return $bucket }
 
 $ENV{ROOSE_SKIP} and plan skip_all => 'ROOSE_SKIP is set. Test skipped'.
 eval {
-	$bucket = Roose->bucket( $ENV{ROOSEDB} ? split( /,/, $ENV{ROOSEDB} ) : '_roose_testing' )
+	$bucket = Roose->init( $ENV{ROOSEDB} ? split( /,/, $ENV{ROOSEDB} ) : undef )
 };
 if( $@ ) {
 	$ENV{ROOSE_SKIP} = 1;
