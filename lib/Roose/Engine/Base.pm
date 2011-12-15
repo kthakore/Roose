@@ -37,7 +37,7 @@ sub bucket {
 	# get the current bucket or make it with the bucket_name
 	my $config = $self->meta->{roose_config};
 	$new_bucket or return $config->{bucket} ||
-	( $config->{bucket} = Roose->bucket( $config->{bucket_name} ) );
+	( $config->{bucket} = Roose->bucket(  $config->{bucket_name} ) );
 
 	# setter
 	my $is_singleton = ! ref $self;

@@ -15,7 +15,7 @@ use Roose;
 }
 {
 package main;
-my $b = Roose->bucket( bucket_name => 'testing', host => 'http://127.0.0.1:8091');
+ Roose->init( 'http://127.0.0.1:8091');
 
 my $homer = Person->new( name => 'Homer' );
 $homer->save();

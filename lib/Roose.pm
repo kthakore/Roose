@@ -24,21 +24,21 @@ has '_args' => ( is => 'rw',
 							   }
 				);
 
-sub bucket {
+sub init {
 	my $self = shift;
-	my %params = @_ == 1 ? (bucket_name=>shift) : @_;
+	my %params = @_ == 1 ? (host=>shift) : @_;
 
 	my $now = delete $params{'now'};
 	$self->_args( \%params );
-	return $self->connect if $now || defined wantarray;
 }
 
-sub connect {
+sub bucket {
 	my $self = shift;
-	my %params = @_ || %{ $self->_args};
+	my $name = shift; 
+	my %params =  %{ $self->_args};
 	my $key = delete( $params{'-class'} ) || 'default';
 	$self->_client( Net::Riak->new(%params) ) unless ref $self->_client;
-	$self->_bucket( { $key => $self->_client->bucket( $params{bucket_name} ) } );
+	$self->_bucket( { $key => $self->_client->bucket( $name ) } );
 	return $self->_bucket->{$key};
 }
 
@@ -51,12 +51,6 @@ sub connection {
 	my $self = shift;
 	$self->_client and return $self->_client;
 	$self->connect and return $self->_client;
-}
-
-sub _bucket_for_class {
-	my ($self, $class ) = @_;
-	return $self->_bucket->{$class} || $self->_bucket->{default} if defined $self->_bucket;
-	return $self->connect;
 }
 
 
